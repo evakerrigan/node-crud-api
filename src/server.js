@@ -2,7 +2,7 @@ import http from "http";
 import url from "url";
 import dotenv from "dotenv";
 dotenv.config();
-import { getAllUsers } from "./api/controllers/userController";
+import { getAllUsers } from "./api/controllers/userController.js";
 
 const server = http.createServer((req, res) => {
   if (req.url === "/api/users" && req.method === "GET") {

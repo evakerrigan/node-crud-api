@@ -1,4 +1,4 @@
-const { findAllUsers } = require("../models/userModel");
+import { findAllUsers } from '../models/userModel.js'
 
 export async function getAllUsers(req, res) {
   try {
