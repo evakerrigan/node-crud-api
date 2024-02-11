@@ -5,9 +5,10 @@ export async function getAllUsers(req, res) {
     const users = await findAllUsers();
     res.statusCode = 200;
     res.setHeader("Content-Type", "application/json");
-    res.json(users);
-    res.end();
+    res.end(JSON.stringify(users));
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.statusCode = 500;
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify({ message: error.message }));
   }
 }
