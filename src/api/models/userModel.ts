@@ -1,20 +1,13 @@
+import { v4 as uuidv4 } from 'uuid';
+
 interface User {
-  id: number;
-  name: string;
+  id: string;
+  username: string;
+  age: number;
+  hobbies: string[];
 }
 
-const users: User[] = [
-  {
-    id: 1,
-    name: "John Doe",
-  },
-  {
-    id: 2,
-    name: "Jane Doe",
-  }
-]
-
-let nextId = users.length + 1;
+let users: User[] = [];
 
 export const findAllUsers = (): Promise<User[]> => {
   return new Promise((resolve, reject) => {
@@ -27,11 +20,35 @@ export const findAllUsers = (): Promise<User[]> => {
   })
 }
 
-export const addUser = (name: string): User => {
+export const addUser = (username: string, age: number, hobbies: string[]): User => {
   const newUser = {
-    id: nextId++,
-    name: name,
+    id: uuidv4(),
+    username: username,
+    age: age,
+    hobbies: hobbies,
   };
   users.push(newUser);
   return newUser;
+};
+
+export const updateUser = (userId: string, username: string, age: number, hobbies: string[]): User | undefined => {
+  const userIndex = users.findIndex((user) => user.id === userId);
+  if (userIndex !== -1) {
+    users[userIndex] = {
+      ...users[userIndex],
+      id: userId, // Убедитесь, что свойство 'id' присутствует в объекте
+      username: username,
+      age: age,
+      hobbies: hobbies,
+    };
+    return users[userIndex];
+  } else {
+    return undefined;
+  }
+};
+
+export const deleteUser = (userId: string): boolean => {
+  const initialLength = users.length;
+  users = users.filter((user) => user.id !== userId);
+  return users.length < initialLength;
 };

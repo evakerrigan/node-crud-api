@@ -1,24 +1,56 @@
 import http from "http";
-//import url from "url";
 import dotenv from "dotenv";
-import { getAllUsers, addNewUser } from "./api/controllers/userController.ts";
+import {
+  getControllerAllUsers,
+  addControllerNewUser,
+  updateControllerUser,
+  deleteControllerUser,
+} from "./api/controllers/userController.ts";
 
 dotenv.config();
 
 const server = http.createServer((req, res) => {
   if (req.url === "/api/users" && req.method === "GET") {
-    getAllUsers(req, res);
+    getControllerAllUsers(req, res);
   } else if (req.url === "/api/users" && req.method === "POST") {
-    addNewUser(req, res);
+    addControllerNewUser(req, res);
+  } else if (
+    req.url &&
+    req.url.match(/\/api\/users\/[a-zA-Z0-9-]+/) &&
+    req.method === "PUT"
+  ) {
+    const userId = req.url.split("/").pop();
+    if (userId !== undefined) {
+      updateControllerUser(req, res, userId);
+    } else {
+      res.statusCode = 404;
+      res.setHeader("Content-Type", "text/html");
+      res.write("Not found!");
+      res.end();
+    }
+  } else if (
+    req.url &&
+    req.url.match(/\/api\/users\/[a-zA-Z0-9-]+/) &&
+    req.method === "DELETE"
+  ) {
+    const userId = req.url.split("/").pop();
+    if (userId !== undefined) {
+      deleteControllerUser(req, res, userId);
+    } else {
+      res.statusCode = 404;
+      res.setHeader("Content-Type", "text/html");
+      res.write("Not found!");
+      res.end();
+    }
   } else {
     res.statusCode = 404;
     res.setHeader("Content-Type", "text/html");
     res.write("Not found!");
     res.end();
-  }  
+  }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5555;
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
