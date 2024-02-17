@@ -4,7 +4,9 @@
     "forceConsistentCasingInFileNames": true, // Проверка регистра и пути файлов
     "allowSyntheticDefaultImports": true, // Разрешает импорт модулей синтетических экспортов
     "esModuleInterop": true, // Включает генерацию дополнительного кода для обеспечения совместимости с ES модулями
-    "lib": ["ESNext"], // Список библиотек, используемых в проекте
+    "lib": [
+      "ESNext"
+    ], // Список библиотек, используемых в проекте
     "module": "CommonJS", // Формат модулей для кода, сгенерированного компилятором
     "moduleResolution": "Node", // Способ разрешения модулей
     "noUncheckedIndexedAccess": true, // Проверка на отсутствие непроверенного доступа к элементам массива
@@ -15,11 +17,24 @@
     "removeComments": true, // Удаление комментариев из выходных файлов
     "resolveJsonModule": true, // Разрешает импортировать JSON файлы как модули
     "skipLibCheck": true, // Пропуск проверки объявлений библиотек
-    "sourceMap": true, // Генерация карты исходного кода
+    "sourceMap": false, // Генерация карты исходного кода
     "strict": true, // Включает все строгие проверки
     "strictPropertyInitialization": false, // Проверка на инициализацию свойств классов
-    "target": "ES2020", // Версия ECMAScript, в которую будет транслироваться код
+    "target": "ESNext", // Версия ECMAScript, в которую будет транслироваться код
     "allowImportingTsExtensions": true,
     "noEmit": true,
-  }
+    "noImplicitAny": true,
+    "declaration": false,
+    "allowJs": true,
+  },
+  "lib": [
+    "ESNext"
+  ],
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
