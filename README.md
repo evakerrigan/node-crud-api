@@ -55,8 +55,8 @@ address: 127.0.0.1:5555/api/users
 method: post
 address: 127.0.0.1:5555/api/users
 body: {
-    "username": "test name",
-    "age": 99,
+    "username": "Javascriptoslav",
+    "age": 28,
     "hobbies": ["travels"]
 }
 ```
