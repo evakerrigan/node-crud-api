@@ -4,7 +4,6 @@
   "description": "task for rss https://github.com/AlreadyBored/nodejs-assignments/blob/main/assignments/crud-api/assignment.md",
   "author": "EvaKerrigan",
   "main": "dist/index.js",
-  "type": "module",
   "engines": {
     "node": ">=20.0.0"
   },
