@@ -1,16 +1,18 @@
 {
   "name": "crud-api",
   "version": "1.0.0",
-  "description": "CRUD API",
+  "description": "task for rss https://github.com/AlreadyBored/nodejs-assignments/blob/main/assignments/crud-api/assignment.md",
   "author": "EvaKerrigan",
-  "main": "server.js",
+  "main": "dist/index.js",
   "type": "module",
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
-    "start:dev": "nodemon --experimental-specifier-resolution=node src/server.js",
-    "start:prod": "node dist/server.js"
+    "build": "webpack",
+    "start:dev": "nodemon --exec npx ts-node --transpile-only src/server.ts",
+    "start:prod": "npm run build && npm run start",
+    "lint": "eslint . --ext .ts"
   },
   "license": "ISC",
   "repository": {
@@ -28,6 +30,7 @@
     "dotenv": "^16.4.2",
     "eslint": "^8.56.0",
     "prettier": "^3.2.5",
+    "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3",

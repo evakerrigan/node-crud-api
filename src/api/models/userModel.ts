@@ -1,4 +1,9 @@
-const users = [
+interface User {
+  id: number;
+  name: string;
+}
+
+const users: User[] = [
   {
     id: 1,
     name: "John Doe",
@@ -11,7 +16,7 @@ const users = [
 
 let nextId = users.length + 1;
 
-export const findAllUsers = () => {
+export const findAllUsers = (): Promise<User[]> => {
   return new Promise((resolve, reject) => {
     // if (errorCondition) {
     //   reject(new Error('Error message'));
@@ -21,7 +26,7 @@ export const findAllUsers = () => {
   })
 }
 
-export const addUser = (name) => {
+export const addUser = (name: string): User => {
   const newUser = {
     id: nextId++,
     name: name,

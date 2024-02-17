@@ -1,19 +1,20 @@
-import { findAllUsers, addUser } from '../models/userModel.js'
+import { findAllUsers, addUser } from '../models/userModel.ts';
+import { IncomingMessage, ServerResponse } from 'http';
 
-export async function getAllUsers(req, res) {
+export async function getAllUsers(req: IncomingMessage, res: ServerResponse) {
   try {
     const users = await findAllUsers();
     res.statusCode = 200;
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify(users));
-  } catch (error) {
+  } catch (error: any) {
     res.statusCode = 500;
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify({ message: error.message }));
   }
 }
 
-export async function addNewUser(req, res) {
+export async function addNewUser(req: IncomingMessage, res: ServerResponse) {
   try {
     if (req.method !== "POST") {
       res.statusCode = 405; // Method Not Allowed
@@ -23,7 +24,7 @@ export async function addNewUser(req, res) {
     }
 
     let body = '';
-    req.on('data', (chunk) => {
+    req.on('data', (chunk: string) => {
       body += chunk.toString();
     });
 
@@ -34,7 +35,7 @@ export async function addNewUser(req, res) {
       res.setHeader("Content-Type", "application/json");
       res.end(JSON.stringify(newUser));
     });
-  } catch (error) {
+  } catch (error: any) {
     res.statusCode = 500;
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify({ message: error.message }));

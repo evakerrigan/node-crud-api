@@ -1,7 +1,7 @@
 import http from "http";
 //import url from "url";
 import dotenv from "dotenv";
-import { getAllUsers, addNewUser } from "./api/controllers/userController.js";
+import { getAllUsers, addNewUser } from "./api/controllers/userController.ts";
 
 dotenv.config();
 

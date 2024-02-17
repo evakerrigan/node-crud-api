@@ -1,8 +1,9 @@
-const path = require('path');
+import path from 'path';
 
-module.exports = {
+const config = {
   mode: 'development',
-  entry: './src/index.ts',
+  entry: './src/server.ts',
+  target: 'node',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -20,3 +21,5 @@ module.exports = {
     ],
   },
 };
+
+export default config;
