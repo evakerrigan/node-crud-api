@@ -4,6 +4,8 @@ import { IncomingMessage, ServerResponse } from 'http';
 export async function getAllUsers(req: IncomingMessage, res: ServerResponse) {
   try {
     const users = await findAllUsers();
+    const userId = req.headers['user-id'];
+    console.log(`User ID: ${userId}`);
     res.statusCode = 200;
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify(users));

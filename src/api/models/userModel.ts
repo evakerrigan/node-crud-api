@@ -18,11 +18,12 @@ let nextId = users.length + 1;
 
 export const findAllUsers = (): Promise<User[]> => {
   return new Promise((resolve, reject) => {
-    // if (errorCondition) {
-    //   reject(new Error('Error message'));
-    // } else {
+    const errorCondition = false; 
+    if (errorCondition) {
+      reject(new Error('Error message'));
+    } else {
       resolve(users);
-    // }
+    }
   })
 }
 
