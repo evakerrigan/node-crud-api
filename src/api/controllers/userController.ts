@@ -1,5 +1,6 @@
 import {
   findAllUsers,
+  getUserById,
   addUser,
   updateUser,
   deleteUser,
@@ -14,6 +15,31 @@ export async function getControllerAllUsers(req: IncomingMessage, res: ServerRes
     res.statusCode = 200;
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify(users));
+  } catch (error: any) {
+    res.statusCode = 500;
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify({ message: error.message }));
+  }
+}
+
+export async function getControllerUser(
+  req: IncomingMessage,
+  res: ServerResponse,
+  userId: string
+) {
+  try {
+    const user = await getUserById(userId); // Получаем пользователя по его идентификатору
+    if (user) {
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify(user));
+    } else {
+      res.statusCode = 404;
+      res.setHeader("Content-Type", "text/html");
+      res.write("User not found");
+      res.end();
+    }
+    console.log(req.url);
   } catch (error: any) {
     res.statusCode = 500;
     res.setHeader("Content-Type", "application/json");

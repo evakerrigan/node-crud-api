@@ -20,6 +20,10 @@ export const findAllUsers = (): Promise<User[]> => {
   })
 }
 
+export const getUserById = (userId: string) => {
+  return users.find((user) => user.id === userId);
+};
+
 export const addUser = (username: string, age: number, hobbies: string[]): User => {
   const newUser = {
     id: uuidv4(),

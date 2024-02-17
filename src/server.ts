@@ -2,6 +2,7 @@ import http from "http";
 import dotenv from "dotenv";
 import {
   getControllerAllUsers,
+  getControllerUser,
   addControllerNewUser,
   updateControllerUser,
   deleteControllerUser,
@@ -12,6 +13,20 @@ dotenv.config();
 const server = http.createServer((req, res) => {
   if (req.url === "/api/users" && req.method === "GET") {
     getControllerAllUsers(req, res);
+  } else if (
+    req.url &&
+    req.url.match(/\/api\/users\/[a-zA-Z0-9-]+/) &&
+    req.method === "GET"
+  ) {
+    const userId = req.url.split("/").pop();
+    if (userId !== undefined) {
+      getControllerUser(req, res, userId); // Добавляем обработчик для получения пользователя по идентификатору
+    } else {
+      res.statusCode = 404;
+      res.setHeader("Content-Type", "text/html");
+      res.write("Not found userId for get!");
+      res.end();
+    }
   } else if (req.url === "/api/users" && req.method === "POST") {
     addControllerNewUser(req, res);
   } else if (
@@ -25,7 +40,7 @@ const server = http.createServer((req, res) => {
     } else {
       res.statusCode = 404;
       res.setHeader("Content-Type", "text/html");
-      res.write("Not found!");
+      res.write("Not found userId for update!");
       res.end();
     }
   } else if (
@@ -39,13 +54,13 @@ const server = http.createServer((req, res) => {
     } else {
       res.statusCode = 404;
       res.setHeader("Content-Type", "text/html");
-      res.write("Not found!");
+      res.write("Not found userId for delete!");
       res.end();
     }
   } else {
     res.statusCode = 404;
     res.setHeader("Content-Type", "text/html");
-    res.write("Not found!");
+    res.write("Not found что то пошло не так!");
     res.end();
   }
 });
