@@ -1,4 +1,4 @@
-import path from 'path';
+const path = require('path');
 
 const config = {
   mode: 'development',
@@ -10,6 +10,7 @@ const config = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
+    mainFiles: ['index', 'server'], 
   },
   module: {
     rules: [
@@ -22,4 +23,4 @@ const config = {
   },
 };
 
-export default config;
+module.exports = config;
