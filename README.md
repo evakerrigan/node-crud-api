@@ -65,14 +65,14 @@ body: {
 
 ```
 method: get
-address: 127.0.0.1:5555/api/users/${userID}
+address: 127.0.0.1:5555/api/users/userID
 ```
 
 #### Update user
 
 ```
 method: put
-address: 127.0.0.1:5555/api/users/${userID}
+address: 127.0.0.1:5555/api/users/userID
 body: {
     "username": "test name2",
     "age": 100,
@@ -84,7 +84,7 @@ body: {
 
 ```
 method: delete
-address: 127.0.0.1:5555/api/users/${userID}
+address: 127.0.0.1:5555/api/users/userID
 ```
 
 ---
