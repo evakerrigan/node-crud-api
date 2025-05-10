@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 interface User {
   id: string;
@@ -11,20 +11,24 @@ let users: User[] = [];
 
 export const findAllUsers = (): Promise<User[]> => {
   return new Promise((resolve, reject) => {
-    const errorCondition = false; 
+    const errorCondition = false;
     if (errorCondition) {
-      reject(new Error('Error message'));
+      reject(new Error("Error message"));
     } else {
       resolve(users);
     }
-  })
-}
+  });
+};
 
 export const getUserById = (userId: string) => {
   return users.find((user) => user.id === userId);
 };
 
-export const addUser = (username: string, age: number, hobbies: string[]): User => {
+export const addUser = (
+  username: string,
+  age: number,
+  hobbies: string[]
+): User => {
   const newUser = {
     id: uuidv4(),
     username: username,
@@ -35,7 +39,12 @@ export const addUser = (username: string, age: number, hobbies: string[]): User 
   return newUser;
 };
 
-export const updateUser = (userId: string, username: string, age: number, hobbies: string[]): User | undefined => {
+export const updateUser = (
+  userId: string,
+  username: string,
+  age: number,
+  hobbies: string[]
+): User | undefined => {
   const userIndex = users.findIndex((user) => user.id === userId);
   if (userIndex !== -1) {
     users[userIndex] = {

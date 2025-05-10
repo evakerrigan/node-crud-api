@@ -7,7 +7,10 @@ import {
 } from "../models/userModel.ts";
 import { IncomingMessage, ServerResponse } from "http";
 
-export async function getControllerAllUsers(req: IncomingMessage, res: ServerResponse) {
+export async function getControllerAllUsers(
+  req: IncomingMessage,
+  res: ServerResponse
+) {
   try {
     const users = await findAllUsers();
     const userId = req.headers["user-id"];
@@ -47,7 +50,10 @@ export async function getControllerUser(
   }
 }
 
-export async function addControllerNewUser(req: IncomingMessage, res: ServerResponse) {
+export async function addControllerNewUser(
+  req: IncomingMessage,
+  res: ServerResponse
+) {
   try {
     if (req.method !== "POST") {
       res.statusCode = 405; // Method Not Allowed
@@ -103,10 +109,18 @@ export async function deleteControllerUser(
     const body = await getRequestBody(req); // Получаем тело запроса
     const requestData = JSON.parse(body);
     console.log(`Request data: ${requestData}`);
+
     const deletedUser = await deleteUser(userId);
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "application/json");
-    res.end(JSON.stringify(deletedUser));
+
+    if (deletedUser) {
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify(deletedUser));
+    } else {
+      res.statusCode = 404;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ message: "User not found" }));
+    }
   } catch (error: any) {
     res.statusCode = 500;
     res.setHeader("Content-Type", "application/json");
