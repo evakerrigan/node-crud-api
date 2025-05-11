@@ -31,6 +31,12 @@ export async function getControllerUser(
   res: ServerResponse,
   userId: string
 ) {
+  if (!userId || !validateUUID(userId)) {
+    res.writeHead(400);
+    res.end("Invalid UUID");
+    return;
+  }
+
   try {
     const user = await getUserById(userId);
     if (user) {
@@ -124,6 +130,12 @@ export async function updateControllerUser(
   res: ServerResponse,
   userId: string
 ) {
+  if (!userId || !validateUUID(userId)) {
+    res.writeHead(400);
+    res.end("Invalid UUID");
+    return;
+  }
+
   try {
     const body = await getRequestBody(req);
     const { username, age, hobbies } = JSON.parse(body);
