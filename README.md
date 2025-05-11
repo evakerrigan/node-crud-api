@@ -23,7 +23,7 @@ npm install
 #### Create .env file in root folder (you can choose any number)
 
 ```
-PORT=5555
+PORT=4000
 ```
 
 #### Run in development mode
@@ -52,14 +52,14 @@ npm run start:multi
 
 ```
 method: get
-address: 127.0.0.1:5555/api/users
+address: 127.0.0.1:4000/api/users
 ```
 
 #### Add one user
 
 ```
 method: post
-address: 127.0.0.1:5555/api/users
+address: 127.0.0.1:4000/api/users
 body: {
     "username": "Javascriptoslav",
     "age": 28,
@@ -71,14 +71,14 @@ body: {
 
 ```
 method: get
-address: 127.0.0.1:5555/api/users/${userID}
+address: 127.0.0.1:4000/api/users/${userID}
 ```
 
 #### Update user
 
 ```
 method: put
-address: 127.0.0.1:5555/api/users/${userID}
+address: 127.0.0.1:4000/api/users/${userID}
 body: {
     "username": "test name2",
     "age": 100,
@@ -90,7 +90,7 @@ body: {
 
 ```
 method: delete
-address: 127.0.0.1:5555/api/users/${userID}
+address: 127.0.0.1:4000/api/users/${userID}
 ```
 
 ---
