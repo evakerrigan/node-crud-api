@@ -12,7 +12,8 @@
     "start:dev": "nodemon --exec npx ts-node ./src/server.ts",
     "start:prod": "npm run build && npm run start",
     "start:multi": "nodemon --exec npx ts-node ./src/cluster.ts",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "test": "jest"
   },
   "license": "ISC",
   "repository": {

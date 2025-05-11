@@ -10,7 +10,7 @@ import {
 
 dotenv.config();
 
-const server = http.createServer((req, res) => {
+export const server = http.createServer((req, res) => {
   if (req.url === "/api/users" && req.method === "GET") {
     getControllerAllUsers(req, res);
   } else if (
@@ -65,7 +65,7 @@ const server = http.createServer((req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5555;
+const PORT = process.env.PORT || 4000;
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
