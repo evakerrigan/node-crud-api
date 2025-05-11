@@ -50,7 +50,7 @@ export const server = http.createServer((req, res) => {
   ) {
     const userId = req.url.split("/").pop();
     if (userId !== undefined) {
-      deleteControllerUser(req, res, userId);
+      deleteControllerUser(req, res);
     } else {
       res.statusCode = 404;
       res.setHeader("Content-Type", "text/html");

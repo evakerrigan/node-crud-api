@@ -1,3 +1,4 @@
+import { validateUUID } from "../utils/validateUUID.utils";
 import {
   findAllUsers,
   getUserById,
@@ -31,7 +32,7 @@ export async function getControllerUser(
   userId: string
 ) {
   try {
-    const user = await getUserById(userId); // Получаем пользователя по его идентификатору
+    const user = await getUserById(userId);
     if (user) {
       res.statusCode = 200;
       res.setHeader("Content-Type", "application/json");
@@ -68,11 +69,48 @@ export async function addControllerNewUser(
     });
 
     req.on("end", () => {
-      const data = JSON.parse(body);
-      const newUser = addUser(data.username, data.age, data.hobbies);
-      res.statusCode = 201; // Created
-      res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify(newUser));
+      try {
+        const data = JSON.parse(body);
+
+        if (
+          !data.username ||
+          typeof data.username !== "string" ||
+          data.username.trim() === ""
+        ) {
+          res.statusCode = 400;
+          res.setHeader("Content-Type", "application/json");
+          res.end(JSON.stringify({ message: "Invalid username" }));
+          return;
+        }
+
+        if (typeof data.age !== "number" || data.age <= 0) {
+          res.statusCode = 400;
+          res.setHeader("Content-Type", "application/json");
+          res.end(JSON.stringify({ message: "Invalid age" }));
+          return;
+        }
+
+        if (
+          !Array.isArray(data.hobbies) ||
+          data.hobbies.some(
+            (hobby: any) => typeof hobby !== "string" || hobby.trim() === ""
+          )
+        ) {
+          res.statusCode = 400;
+          res.setHeader("Content-Type", "application/json");
+          res.end(JSON.stringify({ message: "Invalid hobbies" }));
+          return;
+        }
+
+        const newUser = addUser(data.username, data.age, data.hobbies);
+        res.statusCode = 201; // Created
+        res.setHeader("Content-Type", "application/json");
+        res.end(JSON.stringify(newUser));
+      } catch (error) {
+        res.statusCode = 400;
+        res.setHeader("Content-Type", "application/json");
+        res.end(JSON.stringify({ message: "Invalid request body" }));
+      }
     });
   } catch (error: any) {
     res.statusCode = 500;
@@ -89,10 +127,44 @@ export async function updateControllerUser(
   try {
     const body = await getRequestBody(req);
     const { username, age, hobbies } = JSON.parse(body);
+
+    if (!username || typeof username !== "string" || username.trim() === "") {
+      res.statusCode = 400;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ message: "Invalid username" }));
+      return;
+    }
+
+    if (typeof age !== "number" || age <= 0) {
+      res.statusCode = 400;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ message: "Invalid age" }));
+      return;
+    }
+
+    if (
+      !Array.isArray(hobbies) ||
+      hobbies.some(
+        (hobby: any) => typeof hobby !== "string" || hobby.trim() === ""
+      )
+    ) {
+      res.statusCode = 400;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ message: "Invalid hobbies" }));
+      return;
+    }
+
     const updateUserResult = await updateUser(userId, username, age, hobbies);
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "application/json");
-    res.end(JSON.stringify(updateUserResult));
+
+    if (updateUserResult) {
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify(updateUserResult));
+    } else {
+      res.statusCode = 404;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ message: "User not found" }));
+    }
   } catch (error: any) {
     res.statusCode = 500;
     res.setHeader("Content-Type", "application/json");
@@ -102,20 +174,22 @@ export async function updateControllerUser(
 
 export async function deleteControllerUser(
   req: IncomingMessage,
-  res: ServerResponse,
-  userId: string
+  res: ServerResponse
 ) {
-  try {
-    const body = await getRequestBody(req); // Получаем тело запроса
-    const requestData = JSON.parse(body);
-    console.log(`Request data: ${requestData}`);
+  const userId = req.url?.split("/").pop();
 
+  if (!userId || !validateUUID(userId)) {
+    res.writeHead(400);
+    res.end("Invalid UUID");
+    return;
+  }
+
+  try {
     const deletedUser = await deleteUser(userId);
 
     if (deletedUser) {
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify(deletedUser));
+      res.statusCode = 204;
+      res.end();
     } else {
       res.statusCode = 404;
       res.setHeader("Content-Type", "application/json");
