@@ -12,7 +12,7 @@ dotenv.config();
 
 export const server = http.createServer((req, res) => {
   if (req.url === "/api/users" && req.method === "GET") {
-    getControllerAllUsers(req, res);
+    getControllerAllUsers(res);
   } else if (
     req.url &&
     req.url.match(/\/api\/users\/[a-zA-Z0-9-]+/) &&
