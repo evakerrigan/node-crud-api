@@ -7,15 +7,30 @@ export interface User {
   hobbies: string[];
 }
 
+interface WorkerMessage {
+  type: "USERS_DATA" | "USERS_UPDATED";
+  users: User[];
+}
+
 let users: User[] = [];
+
+// Инициализация данных при запуске воркера
+if (process.send) {
+  // Режим кластера
+  process.send({ type: "GET_USERS" });
+  process.on("message", (message: WorkerMessage) => {
+    if (message.type === "USERS_DATA" || message.type === "USERS_UPDATED") {
+      users = message.users;
+    }
+  });
+}
 
 export const findAllUsers = (): Promise<User[]> => {
   return new Promise((resolve, reject) => {
-    const errorCondition = false;
-    if (errorCondition) {
-      reject(new Error("Error message"));
-    } else {
+    try {
       resolve(users);
+    } catch (error) {
+      reject(error);
     }
   });
 };
@@ -35,7 +50,13 @@ export const addUser = (
     age: age,
     hobbies: hobbies,
   };
-  users.push(newUser);
+  if (process.send) {
+    // Режим кластера
+    process.send({ type: "ADD_USER", user: newUser });
+  } else {
+    // Режим без кластера
+    users.push(newUser);
+  }
   return newUser;
 };
 
@@ -47,21 +68,33 @@ export const updateUser = (
 ): User | undefined => {
   const userIndex = users.findIndex((user) => user.id === userId);
   if (userIndex !== -1) {
-    users[userIndex] = {
+    const updatedUser = {
       ...users[userIndex],
-      id: userId, // Убедитесь, что свойство 'id' присутствует в объекте
+      id: userId,
       username: username,
       age: age,
       hobbies: hobbies,
     };
-    return users[userIndex];
-  } else {
-    return undefined;
+    if (process.send) {
+      // Режим кластера
+      process.send({ type: "UPDATE_USER", userId, user: updatedUser });
+    } else {
+      // Режим без кластера
+      users[userIndex] = updatedUser;
+    }
+    return updatedUser;
   }
+  return undefined;
 };
 
 export const deleteUser = (userId: string): boolean => {
   const initialLength = users.length;
-  users = users.filter((user) => user.id !== userId);
-  return users.length < initialLength;
+  if (process.send) {
+    // Режим кластера
+    process.send({ type: "DELETE_USER", userId });
+  } else {
+    // Режим без кластера
+    users = users.filter((user) => user.id !== userId);
+  }
+  return initialLength > users.length;
 };

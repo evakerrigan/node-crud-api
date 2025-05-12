@@ -2,6 +2,13 @@ import cluster from "cluster";
 import * as http from "http";
 import { IncomingMessage, ServerResponse } from "http";
 import { cpus } from "os";
+import {
+  getSharedUsers,
+  setSharedUsers,
+  addSharedUser,
+  updateSharedUser,
+  deleteSharedUser,
+} from "./sharedMemory";
 
 const BASE_PORT = parseInt(process.env.PORT || "4000", 10);
 const numCPUs = cpus().length - 1;
@@ -50,8 +57,57 @@ if (cluster.isPrimary) {
       PORT: workerPort.toString(),
       WORKER_ID: i.toString(),
     };
-    cluster.fork(env);
+    const worker = cluster.fork(env);
     console.log(`Воркер ${i} будет слушать порт ${workerPort}`);
+
+    // Обработка сообщений от воркеров
+    worker.on("message", (message) => {
+      switch (message.type) {
+        case "GET_USERS":
+          worker.send({ type: "USERS_DATA", users: getSharedUsers() });
+          break;
+        case "SET_USERS":
+          setSharedUsers(message.users);
+          // Оповещаем все воркеры об обновлении
+          for (const id in cluster.workers) {
+            cluster.workers[id]?.send({
+              type: "USERS_UPDATED",
+              users: getSharedUsers(),
+            });
+          }
+          break;
+        case "ADD_USER":
+          addSharedUser(message.user);
+          // Оповещаем все воркеры об обновлении
+          for (const id in cluster.workers) {
+            cluster.workers[id]?.send({
+              type: "USERS_UPDATED",
+              users: getSharedUsers(),
+            });
+          }
+          break;
+        case "UPDATE_USER":
+          updateSharedUser(message.userId, message.user);
+          // Оповещаем все воркеры об обновлении
+          for (const id in cluster.workers) {
+            cluster.workers[id]?.send({
+              type: "USERS_UPDATED",
+              users: getSharedUsers(),
+            });
+          }
+          break;
+        case "DELETE_USER":
+          deleteSharedUser(message.userId);
+          // Оповещаем все воркеры об обновлении
+          for (const id in cluster.workers) {
+            cluster.workers[id]?.send({
+              type: "USERS_UPDATED",
+              users: getSharedUsers(),
+            });
+          }
+          break;
+      }
+    });
   }
 
   // Главный сервер (балансировщик нагрузки) слушает базовый порт
@@ -76,7 +132,56 @@ if (cluster.isPrimary) {
       PORT: workerPort.toString(),
       WORKER_ID: workerId,
     };
-    cluster.fork(env);
+    const newWorker = cluster.fork(env);
+
+    // Добавляем обработчик сообщений для нового воркера
+    newWorker.on("message", (message) => {
+      switch (message.type) {
+        case "GET_USERS":
+          newWorker.send({ type: "USERS_DATA", users: getSharedUsers() });
+          break;
+        case "SET_USERS":
+          setSharedUsers(message.users);
+          // Оповещаем все воркеры об обновлении
+          for (const id in cluster.workers) {
+            cluster.workers[id]?.send({
+              type: "USERS_UPDATED",
+              users: getSharedUsers(),
+            });
+          }
+          break;
+        case "ADD_USER":
+          addSharedUser(message.user);
+          // Оповещаем все воркеры об обновлении
+          for (const id in cluster.workers) {
+            cluster.workers[id]?.send({
+              type: "USERS_UPDATED",
+              users: getSharedUsers(),
+            });
+          }
+          break;
+        case "UPDATE_USER":
+          updateSharedUser(message.userId, message.user);
+          // Оповещаем все воркеры об обновлении
+          for (const id in cluster.workers) {
+            cluster.workers[id]?.send({
+              type: "USERS_UPDATED",
+              users: getSharedUsers(),
+            });
+          }
+          break;
+        case "DELETE_USER":
+          deleteSharedUser(message.userId);
+          // Оповещаем все воркеры об обновлении
+          for (const id in cluster.workers) {
+            cluster.workers[id]?.send({
+              type: "USERS_UPDATED",
+              users: getSharedUsers(),
+            });
+          }
+          break;
+      }
+    });
   });
 } else {
   // Воркеры запускают свой сервер на уникальном порту

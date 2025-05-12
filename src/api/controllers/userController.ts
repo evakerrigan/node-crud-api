@@ -8,9 +8,7 @@ import {
 } from "../models/userModel.ts";
 import { IncomingMessage, ServerResponse } from "http";
 
-export async function getControllerAllUsers(
-  res: ServerResponse
-) {
+export async function getControllerAllUsers(res: ServerResponse) {
   try {
     const users = await findAllUsers();
     res.statusCode = 200;
