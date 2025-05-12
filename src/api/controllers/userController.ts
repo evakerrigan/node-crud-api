@@ -192,16 +192,9 @@ export async function deleteControllerUser(
   }
 
   try {
-    const deletedUser = await deleteUser(userId);
-
-    if (deletedUser) {
-      res.statusCode = 204;
-      res.end();
-    } else {
-      res.statusCode = 404;
-      res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ message: "User not found" }));
-    }
+    await deleteUser(userId);
+    res.statusCode = 204;
+    res.end();
   } catch (error: any) {
     res.statusCode = 500;
     res.setHeader("Content-Type", "application/json");
