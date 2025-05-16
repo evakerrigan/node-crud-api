@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src", // Базовый каталог, используемый для разрешения неабсолютных модулей
+    "forceConsistentCasingInFileNames": true, // Проверка регистра и пути файлов
+    "allowSyntheticDefaultImports": true, // Разрешает импорт модулей синтетических экспортов
+    "esModuleInterop": true, // Включает генерацию дополнительного кода для обеспечения совместимости с ES модулями
+    "lib": [
+      "ESNext"
+    ], // Список библиотек, используемых в проекте
+    "module": "commonjs", // Формат модулей для кода, сгенерированного компилятором
+    "moduleResolution": "node", // Способ разрешения модулей
+    "noUncheckedIndexedAccess": true, // Проверка на отсутствие непроверенного доступа к элементам массива
+    "strictNullChecks": true, // Строгая проверка на null и undefined
+    "noUnusedLocals": true, // Проверка на неиспользуемые локальные переменные
+    "noUnusedParameters": true, // Проверка на неиспользуемые параметры
+    "outDir": "dist", // Путь для сохранения сгенерированных файлов
+    "removeComments": true, // Удаление комментариев из выходных файлов
+    "resolveJsonModule": true, // Разрешает импортировать JSON файлы как модули
+    "skipLibCheck": true, // Пропуск проверки объявлений библиотек
+    "sourceMap": false, // Генерация карты исходного кода
+    "strict": true, // Включает все строгие проверки
+    "strictPropertyInitialization": false, // Проверка на инициализацию свойств классов
+    "target": "ESNext", // Версия ECMAScript, в которую будет транслироваться код
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "noImplicitAny": true,
+    "declaration": false,
+    "allowJs": true,
+  },
+  "lib": [
+    "ESNext"
+  ],
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
